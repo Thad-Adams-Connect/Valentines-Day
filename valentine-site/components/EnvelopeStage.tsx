@@ -20,7 +20,7 @@ export function EnvelopeStage({ ready }: EnvelopeStageProps) {
   }, [ready]);
 
   return (
-    <div className="flex min-h-[70vh] w-full flex-col items-center justify-center gap-8 overflow-hidden rounded-2xl">
+    <div className="flex min-h-[70vh] w-full flex-col items-center justify-center gap-8 overflow-visible rounded-2xl">
       <motion.h4
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: visible ? 1 : 0, y: visible ? 0 : 14 }}
@@ -30,7 +30,7 @@ export function EnvelopeStage({ ready }: EnvelopeStageProps) {
         A letter for you
       </motion.h4>
 
-      <div className="relative h-[33rem] w-full max-w-2xl">
+      <div className="relative min-h-[38rem] w-full max-w-2xl sm:min-h-[42rem]">
         <AnimatePresence>
           {open && (
             <motion.article
@@ -38,7 +38,7 @@ export function EnvelopeStage({ ready }: EnvelopeStageProps) {
               animate={{ opacity: 1, y: -14, scale: 1 }}
               exit={{ opacity: 0, y: 38, scale: 0.98 }}
               transition={{ type: "spring", stiffness: 130, damping: 18 }}
-              className="paper-texture absolute left-1/2 top-10 z-30 w-[92%] -translate-x-1/2 rounded-2xl border border-white/80 px-6 py-7 shadow-[0_16px_36px_rgba(111,45,80,0.14)] sm:px-9"
+              className="paper-texture absolute left-1/2 top-10 z-30 max-h-[27rem] w-[92%] -translate-x-1/2 overflow-y-auto rounded-2xl border border-white/80 px-6 py-7 shadow-[0_16px_36px_rgba(111,45,80,0.14)] sm:max-h-[31rem] sm:px-9"
             >
               <p className="text-center text-lg text-[#754160] sm:text-xl">
                 To my queen — the most irresistible woman I know —  <span className="font-script text-3xl text-[#8a2b58]">Khrystyna</span>,
