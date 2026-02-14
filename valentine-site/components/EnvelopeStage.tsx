@@ -44,9 +44,18 @@ export function EnvelopeStage({ ready }: EnvelopeStageProps) {
                 To my dearest <span className="font-script text-3xl text-[#8a2b58]">Khrystyna</span>,
               </p>
               <p className="font-serif mt-4 text-base leading-8 text-[#5e3350] sm:text-xl">
-                This is your placeholder letter text. Replace it with your final romantic message. Keep it warm,
-                sincere, and timeless. Let every sentence feel like a soft smile and a promise of beautiful
-                moments together.
+                Khrystyna… you are actually dangerous. The way you sit there looking all sweet and innocent,
+                knowing full well you’re about to distract me for the rest of the night? That’s not an accident.
+                You tilt your head a certain way, give me that slow little smile, and suddenly I forget what I was
+                saying. And don’t even get me started on that look you give me when you’re pretending you’re not
+                teasing me. You love it. I see it. The quiet confidence, the soft voice, and then that spark in
+                your eyes that says, “what are you going to do about it?” My серце beats faster every time you
+                lean a little closer to the camera, every time you laugh and bite your lip like you don’t realize
+                what that does to me. You’re sweet, but you’re also trouble. The best kind. And the fact that
+                you’re thousands of miles away only makes it worse, because if you were any closer, I wouldn’t be
+                this well behaved. So keep playing your little game, my beautiful Ukrainian firecracker. Keep
+                acting innocent. Just know I’m counting down the days until I can whisper all of this in your ear
+                instead of typing it… and trust me, I won’t be nearly this calm about it.
               </p>
             </motion.article>
           )}
