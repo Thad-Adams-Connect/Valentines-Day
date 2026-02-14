@@ -41,7 +41,7 @@ export function EnvelopeStage({ ready }: EnvelopeStageProps) {
               className="paper-texture absolute left-1/2 top-10 z-30 w-[92%] -translate-x-1/2 rounded-2xl border border-white/80 px-6 py-7 shadow-[0_16px_36px_rgba(111,45,80,0.14)] sm:px-9"
             >
               <p className="text-center text-lg text-[#754160] sm:text-xl">
-                To my dearest <span className="font-script text-3xl text-[#8a2b58]">Khrystyna</span>,
+                To my queen — the most irresistible woman I know —  <span className="font-script text-3xl text-[#8a2b58]">Khrystyna</span>,
               </p>
               <p className="font-serif mt-4 text-base leading-8 text-[#5e3350] sm:text-xl">
                 Khrystyna… you are actually dangerous. The way you sit there looking all sweet and innocent,
