@@ -19,10 +19,12 @@ export function BackgroundMusic({ src }: BackgroundMusicProps) {
   audio.autoplay = true;
     audio.preload = "auto";
     audio.volume = 0;
+    audio.muted = true;
     audio.load();
 
     let fadeTimer: number | null = null;
   let retryTimer: number | null = null;
+    let unmuteTimer: number | null = null;
 
     const fadeIn = () => {
       if (fadeTimer) {
@@ -40,29 +42,26 @@ export function BackgroundMusic({ src }: BackgroundMusicProps) {
       }, 130);
     };
 
+    const becomeAudible = () => {
+      if (unmuteTimer) {
+        window.clearTimeout(unmuteTimer);
+      }
+      unmuteTimer = window.setTimeout(() => {
+        audio.muted = false;
+        fadeIn();
+      }, 120);
+    };
+
     const tryPlay = async () => {
       try {
         await audio.play();
-        fadeIn();
+        becomeAudible();
         if (retryTimer) {
           window.clearInterval(retryTimer);
           retryTimer = null;
         }
       } catch {
-        const unlock = async () => {
-          try {
-            await audio.play();
-            fadeIn();
-          } finally {
-            window.removeEventListener("pointerdown", unlock);
-            window.removeEventListener("touchstart", unlock);
-            window.removeEventListener("keydown", unlock);
-          }
-        };
-
-        window.addEventListener("pointerdown", unlock, { once: true });
-        window.addEventListener("touchstart", unlock, { once: true });
-        window.addEventListener("keydown", unlock, { once: true });
+        audio.muted = true;
       }
     };
 
@@ -92,11 +91,14 @@ export function BackgroundMusic({ src }: BackgroundMusicProps) {
       if (retryTimer) {
         window.clearInterval(retryTimer);
       }
+      if (unmuteTimer) {
+        window.clearTimeout(unmuteTimer);
+      }
       audio.removeEventListener("ended", handleEnded);
       audio.removeEventListener("canplay", handleCanPlay);
       audio.pause();
     };
   }, []);
 
-  return <audio ref={audioRef} src={src} preload="auto" playsInline autoPlay />;
+  return <audio ref={audioRef} src={src} preload="auto" playsInline autoPlay muted />;
 }
