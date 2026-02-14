@@ -59,9 +59,8 @@ export function EnvelopeStage({ ready }: EnvelopeStageProps) {
               </p>
               <p className="text-center text-lg text-[#754160] sm:text-xl">
                 For ever and always yours,
-                <br />
-                <span className="font-script text-3xl text-[#8a2b58]">Thad</span>
               </p>
+              <p className="font-script text-center text-3xl text-[#8a2b58]">Thad</p>
             </motion.article>
           )}
         </AnimatePresence>

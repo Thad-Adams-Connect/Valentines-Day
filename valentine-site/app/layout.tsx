@@ -23,6 +23,11 @@ const letterSerif = Cormorant_Garamond({
 export const metadata: Metadata = {
   title: "Will You Be My Valentine?",
   description: "An elegant and playful Valentine experience.",
+  icons: {
+    icon: "/KP-Icon.svg",
+    shortcut: "/KP-Icon.svg",
+    apple: "/KP-Icon.svg",
+  },
 };
 
 export default function RootLayout({
