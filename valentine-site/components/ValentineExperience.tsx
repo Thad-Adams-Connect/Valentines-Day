@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { AmbientBackground } from "./AmbientBackground";
-import { BackgroundMusic } from "./BackgroundMusic";
+import { BackgroundMusic } from "@/components/BackgroundMusic";
 import { IntroSequence } from "./IntroSequence";
 import { QuestionStage } from "./QuestionStage";
 import { CelebrationStage } from "./CelebrationStage";
@@ -16,7 +16,7 @@ const smirkyRemarks = [
   "Bold move. I still know your final answer.",
   "Negotiation denied. Destiny has better plans.",
   "Wow. Rejected? I am dramatically offended.",
-  "This is getting theatrical, and I love it.",
+  "Now this is just embarrassing, and I love it.",
   "The universe has spoken. You are choosing YES.",
 ];
 
