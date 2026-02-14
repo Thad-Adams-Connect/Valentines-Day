@@ -21,12 +21,13 @@ const smirkyRemarks = [
 ];
 
 const gifPool = [
-  "/gifs/bear-1.gif",
-  "/gifs/bear-2.gif",
-  "/gifs/bear-3.gif",
-  "/gifs/bear-4.gif",
-  "/gifs/bear-5.gif",
-  "/gifs/bear-6.gif",
+  "/gifs/starting.gif",
+  "/gifs/1no.gif",
+  "/gifs/2no.gif",
+  "/gifs/3no.gif",
+  "/gifs/4no.gif",
+  "/gifs/5no.gif",
+  "/gifs/6no.gif",
 ];
 
 export function ValentineExperience() {
@@ -48,7 +49,7 @@ export function ValentineExperience() {
         return prev;
       }
       const next = prev + 1;
-      setGifIndex((current) => (current + 1) % gifPool.length);
+      setGifIndex(next);
       return next;
     });
   };
