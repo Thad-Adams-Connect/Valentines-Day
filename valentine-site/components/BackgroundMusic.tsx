@@ -8,97 +8,93 @@ type BackgroundMusicProps = {
 
 export function BackgroundMusic({ src }: BackgroundMusicProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const fadeTimerRef = useRef<number | null>(null);
+  const startedRef = useRef(false);
 
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) {
+    if (!audio || startedRef.current) {
       return;
     }
+    startedRef.current = true;
+
+    const targetVolume = 0.3;
+    const fadeDurationMs = 1500;
+    const fadeStepMs = 50;
+    const fadeStep = targetVolume / (fadeDurationMs / fadeStepMs);
 
     audio.loop = true;
-  audio.autoplay = true;
     audio.preload = "auto";
     audio.volume = 0;
     audio.muted = true;
+    audio.setAttribute("playsinline", "true");
+    audio.setAttribute("webkit-playsinline", "true");
     audio.load();
 
-    let fadeTimer: number | null = null;
-  let retryTimer: number | null = null;
-    let unmuteTimer: number | null = null;
-
-    const fadeIn = () => {
-      if (fadeTimer) {
-        window.clearInterval(fadeTimer);
+    const clearFade = () => {
+      if (fadeTimerRef.current) {
+        window.clearInterval(fadeTimerRef.current);
+        fadeTimerRef.current = null;
       }
-      fadeTimer = window.setInterval(() => {
-        if (!audio) {
-          return;
-        }
-        if (audio.volume >= 0.16) {
-          window.clearInterval(fadeTimer as number);
-          return;
-        }
-        audio.volume = Math.min(audio.volume + 0.012, 0.16);
-      }, 130);
     };
 
-    const becomeAudible = () => {
-      if (unmuteTimer) {
-        window.clearTimeout(unmuteTimer);
-      }
-      unmuteTimer = window.setTimeout(() => {
-        audio.muted = false;
-        fadeIn();
-      }, 120);
+    const fadeInToTarget = () => {
+      clearFade();
+      fadeTimerRef.current = window.setInterval(() => {
+        if (audio.volume >= targetVolume) {
+          clearFade();
+          return;
+        }
+        audio.volume = Math.min(audio.volume + fadeStep, targetVolume);
+      }, fadeStepMs);
     };
 
-    const tryPlay = async () => {
+    const startAudiblePlayback = async () => {
+      audio.muted = false;
       try {
         await audio.play();
-        becomeAudible();
-        if (retryTimer) {
-          window.clearInterval(retryTimer);
-          retryTimer = null;
-        }
+        fadeInToTarget();
+        return true;
       } catch {
-        audio.muted = true;
+        return false;
       }
     };
 
-    const handleEnded = () => {
-      audio.currentTime = 0;
-      void audio.play();
-    };
-
-    const handleCanPlay = () => {
-      void tryPlay();
-    };
-
-    audio.addEventListener("ended", handleEnded);
-    audio.addEventListener("canplay", handleCanPlay);
-
-    void tryPlay();
-    retryTimer = window.setInterval(() => {
-      if (audio.paused) {
-        void tryPlay();
+    const tryAutoplay = async () => {
+      try {
+        await audio.play();
+        return startAudiblePlayback();
+      } catch {
+        return false;
       }
-    }, 1500);
+    };
+
+    const unlockOnInteraction = () => {
+      void startAudiblePlayback().then((didStart) => {
+        if (didStart) {
+          window.removeEventListener("pointerdown", unlockOnInteraction);
+          window.removeEventListener("touchstart", unlockOnInteraction);
+          window.removeEventListener("keydown", unlockOnInteraction);
+        }
+      });
+    };
+
+    void tryAutoplay().then((didAutoplay) => {
+      if (!didAutoplay) {
+        window.addEventListener("pointerdown", unlockOnInteraction);
+        window.addEventListener("touchstart", unlockOnInteraction);
+        window.addEventListener("keydown", unlockOnInteraction);
+      }
+    });
 
     return () => {
-      if (fadeTimer) {
-        window.clearInterval(fadeTimer);
-      }
-      if (retryTimer) {
-        window.clearInterval(retryTimer);
-      }
-      if (unmuteTimer) {
-        window.clearTimeout(unmuteTimer);
-      }
-      audio.removeEventListener("ended", handleEnded);
-      audio.removeEventListener("canplay", handleCanPlay);
+      window.removeEventListener("pointerdown", unlockOnInteraction);
+      window.removeEventListener("touchstart", unlockOnInteraction);
+      window.removeEventListener("keydown", unlockOnInteraction);
+      clearFade();
       audio.pause();
     };
   }, []);
 
-  return <audio ref={audioRef} src={src} preload="auto" playsInline autoPlay muted />;
+  return <audio ref={audioRef} src={src} preload="auto" playsInline autoPlay muted loop />;
 }
