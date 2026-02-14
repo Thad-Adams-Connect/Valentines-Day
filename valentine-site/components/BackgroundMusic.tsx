@@ -9,16 +9,14 @@ type BackgroundMusicProps = {
 export function BackgroundMusic({ src }: BackgroundMusicProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const fadeTimerRef = useRef<number | null>(null);
-  const startedRef = useRef(false);
 
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio || startedRef.current) {
+    if (!audio) {
       return;
     }
-    startedRef.current = true;
 
-    const targetVolume = 0.3;
+    const targetVolume = 0.2;
     const fadeDurationMs = 1500;
     const fadeStepMs = 50;
     const fadeStep = targetVolume / (fadeDurationMs / fadeStepMs);
@@ -26,10 +24,8 @@ export function BackgroundMusic({ src }: BackgroundMusicProps) {
     audio.loop = true;
     audio.preload = "auto";
     audio.volume = 0;
-    audio.muted = true;
     audio.setAttribute("playsinline", "true");
     audio.setAttribute("webkit-playsinline", "true");
-    audio.load();
 
     const clearFade = () => {
       if (fadeTimerRef.current) {
@@ -49,8 +45,7 @@ export function BackgroundMusic({ src }: BackgroundMusicProps) {
       }, fadeStepMs);
     };
 
-    const startAudiblePlayback = async () => {
-      audio.muted = false;
+    const playAndFade = async () => {
       try {
         await audio.play();
         fadeInToTarget();
@@ -60,41 +55,23 @@ export function BackgroundMusic({ src }: BackgroundMusicProps) {
       }
     };
 
-    const tryAutoplay = async () => {
-      try {
-        await audio.play();
-        return startAudiblePlayback();
-      } catch {
-        return false;
-      }
+    const onFirstPointerDown = () => {
+      window.removeEventListener("pointerdown", onFirstPointerDown);
+      void playAndFade();
     };
 
-    const unlockOnInteraction = () => {
-      void startAudiblePlayback().then((didStart) => {
-        if (didStart) {
-          window.removeEventListener("pointerdown", unlockOnInteraction);
-          window.removeEventListener("touchstart", unlockOnInteraction);
-          window.removeEventListener("keydown", unlockOnInteraction);
-        }
-      });
-    };
-
-    void tryAutoplay().then((didAutoplay) => {
+    void playAndFade().then((didAutoplay) => {
       if (!didAutoplay) {
-        window.addEventListener("pointerdown", unlockOnInteraction);
-        window.addEventListener("touchstart", unlockOnInteraction);
-        window.addEventListener("keydown", unlockOnInteraction);
+        window.addEventListener("pointerdown", onFirstPointerDown, { once: true });
       }
     });
 
     return () => {
-      window.removeEventListener("pointerdown", unlockOnInteraction);
-      window.removeEventListener("touchstart", unlockOnInteraction);
-      window.removeEventListener("keydown", unlockOnInteraction);
+      window.removeEventListener("pointerdown", onFirstPointerDown);
       clearFade();
       audio.pause();
     };
   }, []);
 
-  return <audio ref={audioRef} src={src} preload="auto" playsInline autoPlay muted loop />;
+  return <audio ref={audioRef} src={src} preload="auto" playsInline loop />;
 }
