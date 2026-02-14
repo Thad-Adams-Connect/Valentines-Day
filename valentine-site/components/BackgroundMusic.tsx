@@ -16,12 +16,13 @@ export function BackgroundMusic({ src }: BackgroundMusicProps) {
       return;
     }
 
-    const targetVolume = 0.2;
+    const targetVolume = 0.05;
     const fadeDurationMs = 1500;
     const fadeStepMs = 50;
     const fadeStep = targetVolume / (fadeDurationMs / fadeStepMs);
 
     audio.loop = true;
+    audio.autoplay = true;
     audio.preload = "auto";
     audio.volume = 0;
     audio.setAttribute("playsinline", "true");
@@ -73,5 +74,5 @@ export function BackgroundMusic({ src }: BackgroundMusicProps) {
     };
   }, []);
 
-  return <audio ref={audioRef} src={src} preload="auto" playsInline loop />;
+  return <audio ref={audioRef} src={src} preload="auto" playsInline loop autoPlay />;
 }
