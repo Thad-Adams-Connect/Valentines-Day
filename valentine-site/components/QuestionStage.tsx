@@ -113,6 +113,8 @@ export function QuestionStage({ noClicks, yesScale, onNoClick, onYesClick, remar
     return 78;
   }, [noClicks]);
 
+  const displayRemark = remark || (noClicks === 0 ? "Now just try to say no." : "");
+
   return (
     <div className="flex w-full flex-col items-center gap-6">
       <h2 className="text-center text-2xl font-semibold text-[#6f2d50] sm:text-4xl">Will you be my Valentine?</h2>
@@ -165,16 +167,16 @@ export function QuestionStage({ noClicks, yesScale, onNoClick, onYesClick, remar
       </div>
 
       <AnimatePresence mode="wait">
-        {remark && (
+        {displayRemark && (
           <motion.p
-            key={remark}
+            key={displayRemark}
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ type: "spring", stiffness: 130, damping: 20 }}
             className="min-h-8 px-2 text-center text-base font-medium text-[#7e3860] sm:text-lg"
           >
-            {remark}
+            {displayRemark}
           </motion.p>
         )}
       </AnimatePresence>
