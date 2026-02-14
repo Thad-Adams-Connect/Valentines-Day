@@ -18,6 +18,8 @@ export function BackgroundMusic({ src }: BackgroundMusicProps) {
     audio.loop = true;
     audio.preload = "auto";
     audio.volume = 0;
+    audio.playsInline = true;
+    audio.load();
 
     let fadeTimer: number | null = null;
 
@@ -69,5 +71,5 @@ export function BackgroundMusic({ src }: BackgroundMusicProps) {
     };
   }, []);
 
-  return <audio ref={audioRef} src={src} />;
+  return <audio ref={audioRef} src={src} preload="auto" playsInline />;
 }
