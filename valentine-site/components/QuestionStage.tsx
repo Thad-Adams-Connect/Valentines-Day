@@ -113,7 +113,7 @@ export function QuestionStage({ noClicks, yesScale, onNoClick, onYesClick, remar
             key={`${gif}-${noClicks}`}
             src={gif}
             alt="Bear reaction"
-            className="h-full w-full rounded-2xl object-cover"
+            className="absolute left-1/2 top-1/2 h-1/2 w-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl object-contain"
             initial={{ opacity: 0, scale: 1.03 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
