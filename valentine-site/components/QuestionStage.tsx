@@ -103,6 +103,8 @@ export function QuestionStage({ noClicks, yesScale, onNoClick, onYesClick, remar
     }
   };
 
+  const gifSize = noClicks > 3 ? "62.5%" : "50%";
+
   return (
     <div className="flex w-full flex-col items-center gap-6">
       <h2 className="text-center text-2xl font-semibold text-[#6f2d50] sm:text-4xl">Will you be my Valentine?</h2>
@@ -113,7 +115,8 @@ export function QuestionStage({ noClicks, yesScale, onNoClick, onYesClick, remar
             key={`${gif}-${noClicks}`}
             src={gif}
             alt="Bear reaction"
-            className="absolute left-1/2 top-1/2 h-1/2 w-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl object-contain"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl object-contain"
+            style={{ width: gifSize, height: gifSize }}
             initial={{ opacity: 0, scale: 1.03 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
