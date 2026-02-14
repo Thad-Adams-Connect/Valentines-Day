@@ -58,7 +58,8 @@ export function EnvelopeStage({ ready }: EnvelopeStageProps) {
                 instead of typing it… and trust me, I won’t be nearly this calm about it.
               </p>
               <p className="text-center text-lg text-[#754160] sm:text-xl">
-                Forever and always yours,  
+                For ever and always yours,
+                <br />
                 <span className="font-script text-3xl text-[#8a2b58]">Thad</span>
               </p>
             </motion.article>
