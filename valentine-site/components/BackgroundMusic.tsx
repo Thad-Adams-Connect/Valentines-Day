@@ -16,11 +16,13 @@ export function BackgroundMusic({ src }: BackgroundMusicProps) {
     }
 
     audio.loop = true;
+  audio.autoplay = true;
     audio.preload = "auto";
     audio.volume = 0;
     audio.load();
 
     let fadeTimer: number | null = null;
+  let retryTimer: number | null = null;
 
     const fadeIn = () => {
       if (fadeTimer) {
@@ -42,6 +44,10 @@ export function BackgroundMusic({ src }: BackgroundMusicProps) {
       try {
         await audio.play();
         fadeIn();
+        if (retryTimer) {
+          window.clearInterval(retryTimer);
+          retryTimer = null;
+        }
       } catch {
         const unlock = async () => {
           try {
@@ -60,15 +66,37 @@ export function BackgroundMusic({ src }: BackgroundMusicProps) {
       }
     };
 
+    const handleEnded = () => {
+      audio.currentTime = 0;
+      void audio.play();
+    };
+
+    const handleCanPlay = () => {
+      void tryPlay();
+    };
+
+    audio.addEventListener("ended", handleEnded);
+    audio.addEventListener("canplay", handleCanPlay);
+
     void tryPlay();
+    retryTimer = window.setInterval(() => {
+      if (audio.paused) {
+        void tryPlay();
+      }
+    }, 1500);
 
     return () => {
       if (fadeTimer) {
         window.clearInterval(fadeTimer);
       }
+      if (retryTimer) {
+        window.clearInterval(retryTimer);
+      }
+      audio.removeEventListener("ended", handleEnded);
+      audio.removeEventListener("canplay", handleCanPlay);
       audio.pause();
     };
   }, []);
 
-  return <audio ref={audioRef} src={src} preload="auto" playsInline />;
+  return <audio ref={audioRef} src={src} preload="auto" playsInline autoPlay />;
 }
